@@ -1,12 +1,12 @@
 # Postman Collection Setup Guide
 
-## 📁 Files Included
+## Files Included
 
 1. **`Secure_File_Sharing_API.postman_collection.json`** - Complete API collection
 2. **`Secure_File_Sharing.postman_environment.json`** - Environment variables
 3. **`POSTMAN_SETUP.md`** - This setup guide
 
-## 🚀 Quick Setup
+## Quick Setup
 
 ### Step 1: Import Collection
 1. Open Postman
@@ -30,7 +30,7 @@ cd secure-file-sharing
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 ```
 
-## 📋 Testing Workflow
+## Testing Workflow
 
 ### 1. System Health Check
 - Run: **System → Health Check**
@@ -47,12 +47,12 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 
 ### 4. Login as Client User
 - Run: **Authentication → Client Login**
-- ✅ **Auto-saves token** to `CLIENT_TOKEN` variable
+- **Auto-saves token** to `CLIENT_TOKEN` variable
 
 ### 5. Login as Ops User
 - Update credentials in **Authentication → Ops Login**
 - Run the request
-- ✅ **Auto-saves token** to `OPS_TOKEN` variable
+- **Auto-saves token** to `OPS_TOKEN` variable
 
 ### 6. Upload File (Ops User)
 - Run: **File Operations → Upload File (Ops Only)**
@@ -67,26 +67,26 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 ### 8. Generate Download Link
 - Update `{{file_id}}` variable with actual file ID
 - Run: **File Operations → Generate Download Link (Client Only)**
-- ✅ **Auto-saves** secure URL to `DOWNLOAD_URL` variable
+- **Auto-saves** secure URL to `DOWNLOAD_URL` variable
 
 ### 9. Download File
 - Run: **File Operations → Secure File Download**
 - Uses the auto-saved download URL
 - Downloads the actual file
 
-## 🔧 Environment Variables
+## Environment Variables
 
 | Variable | Description | Auto-populated |
 |----------|-------------|----------------|
-| `BASE_URL` | API base URL | ❌ Manual |
-| `CLIENT_TOKEN` | Client JWT token | ✅ Auto (after login) |
-| `OPS_TOKEN` | Ops JWT token | ✅ Auto (after login) |
-| `TOKEN_TYPE` | Bearer token type | ❌ Pre-set |
-| `DOWNLOAD_URL` | Secure download link | ✅ Auto (after requesting) |
-| `file_id` | File ID for operations | ❌ Manual (copy from responses) |
-| `verification_token` | Email verification token | ❌ Manual (from email) |
+| `BASE_URL` | API base URL | Manual |
+| `CLIENT_TOKEN` | Client JWT token | Auto (after login) |
+| `OPS_TOKEN` | Ops JWT token | Auto (after login) |
+| `TOKEN_TYPE` | Bearer token type | Pre-set |
+| `DOWNLOAD_URL` | Secure download link | Auto (after requesting) |
+| `file_id` | File ID for operations | Manual (copy from responses) |
+| `verification_token` | Email verification token | Manual (from email) |
 
-## 📝 API Endpoints Overview
+## API Endpoints Overview
 
 ### Authentication (5 endpoints)
 - `POST /auth/client/signup` - User registration
@@ -104,7 +104,7 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 ### System (1 endpoint)
 - `GET /health` - Health check
 
-## 🔒 Security Features
+## Security Features
 
 ### Role-Based Access
 - **Ops Users**: Can only upload files
@@ -120,7 +120,7 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 - Only `.pptx`, `.docx`, `.xlsx` files allowed
 - Other file types rejected with error
 
-## 🧪 Test Scripts Included
+## Test Scripts Included
 
 The collection includes automated test scripts that:
 - Auto-save JWT tokens after successful login
@@ -128,7 +128,7 @@ The collection includes automated test scripts that:
 - Validate response status codes
 - Set environment variables for chaining requests
 
-## 🎯 Pro Tips
+## Pro Tips
 
 1. **Use Runner**: Select the collection and run all requests in sequence
 2. **Environment Switching**: Create separate environments for dev/staging/prod
@@ -136,7 +136,7 @@ The collection includes automated test scripts that:
 4. **Request Chaining**: Use test scripts to pass data between requests
 5. **File Upload**: Use the file selector in form-data body for uploads
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -164,7 +164,7 @@ Check server logs for detailed error information:
 tail -f server.log
 ```
 
-## 📚 Additional Resources
+## Additional Resources
 
 - **Swagger UI**: `http://localhost:8008/docs`
 - **ReDoc**: `http://localhost:8008/redoc`
@@ -174,4 +174,4 @@ tail -f server.log
 
 ---
 
-**Happy Testing! 🚀** 
+**Happy Testing!** 

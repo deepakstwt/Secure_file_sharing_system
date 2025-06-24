@@ -5,18 +5,18 @@ A production-ready secure file sharing system built with FastAPI and MongoDB, fe
 
 ## Features
 
-### ✅ User Management
+### User Management
 - **Client User Signup** with email verification
 - **Role-based Authentication** (Client/Ops users)
 - **JWT Token Security** with expiration
 
-### ✅ File Operations
+### File Operations
 - **File Upload** (Ops users only) - .pptx, .docx, .xlsx
 - **Secure Download Links** (Client users only)
 - **File Listing** (Client users only)
 - **File Type Validation**
 
-### ✅ Security Features
+### Security Features
 - **Encrypted Download URLs** with JWT tokens
 - **Role-based Access Control**
 - **Password Hashing** (bcrypt)
@@ -167,14 +167,14 @@ response = requests.post("/file/upload", files=files, headers=headers)
 
 ## Requirements Compliance
 
-✅ **Framework**: FastAPI (Python)  
-✅ **Database**: MongoDB (NoSQL)  
-✅ **Ops User**: Login + File Upload (.pptx, .docx, .xlsx only)  
-✅ **Client User**: Signup + Email Verify + Login + Download + List Files  
-✅ **Secure Download**: Encrypted URLs with JWT tokens  
-✅ **Role-based Access**: Proper authorization controls  
-✅ **Test Cases**: Comprehensive test suite  
-✅ **Production Plan**: Deployment documentation  
+**Framework**: FastAPI (Python)  
+**Database**: MongoDB (NoSQL)  
+**Ops User**: Login + File Upload (.pptx, .docx, .xlsx only)  
+**Client User**: Signup + Email Verify + Login + Download + List Files  
+**Secure Download**: Encrypted URLs with JWT tokens  
+**Role-based Access**: Proper authorization controls  
+**Test Cases**: Comprehensive test suite  
+**Production Plan**: Deployment documentation  
 
 ## License
 This project is licensed under the MIT License.

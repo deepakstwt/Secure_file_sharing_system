@@ -1,4 +1,4 @@
-# 📥 Document Download Guide
+# Document Download Guide
 
 ## Overview
 This guide explains how to download documents from the Secure File Sharing System using different methods.
@@ -15,7 +15,7 @@ This guide explains how to download documents from the Secure File Sharing Syste
 2. You'll see the interactive API documentation
 
 ### Step 2: Authenticate
-1. Click on **"Authorize"** button (🔒 icon)
+1. Click on **"Authorize"** button (lock icon)
 2. Use OAuth2 form:
    - **Username**: client@company.com
    - **Password**: Pro12345
