@@ -1,0 +1,404 @@
+{
+	"info": {
+		"_postman_id": "12345678-1234-1234-1234-123456789abc",
+		"name": "Secure File Sharing API",
+		"description": "Complete API collection for the Secure File Sharing System with role-based access control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Client Signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"client@example.com\",\n  \"password\": \"SecurePassword123!\",\n  \"full_name\": \"John Doe\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/client/signup",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"client",
+								"signup"
+							]
+						},
+						"description": "Register a new client user. Users with emails containing 'ops' become Ops users automatically."
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/verify-email/{{verification_token}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"verify-email",
+								"{{verification_token}}"
+							]
+						},
+						"description": "Verify user email with token received during signup"
+					},
+					"response": []
+				},
+				{
+					"name": "Client Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('CLIENT_TOKEN', response.access_token);",
+									"    pm.environment.set('TOKEN_TYPE', response.token_type);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "client@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "SecurePassword123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/client/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"client",
+								"login"
+							]
+						},
+						"description": "Login as client user (download/list access only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Ops Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('OPS_TOKEN', response.access_token);",
+									"    pm.environment.set('TOKEN_TYPE', response.token_type);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "ops@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "OpsPassword123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/ops/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"ops",
+								"login"
+							]
+						},
+						"description": "Login as ops user (upload access only)"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth2 Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "client@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "SecurePassword123!",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/token",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						},
+						"description": "OAuth2 compatible token endpoint for Swagger UI"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, verification, and login"
+		},
+		{
+			"name": "File Operations",
+			"item": [
+				{
+					"name": "Upload File (Ops Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{OPS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"description": "Select a .pptx, .docx, or .xlsx file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/file/upload",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"file",
+								"upload"
+							]
+						},
+						"description": "Upload files (Ops users only). Accepts .pptx, .docx, .xlsx files only."
+					},
+					"response": []
+				},
+				{
+					"name": "List Files (Client Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLIENT_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/file/list",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"file",
+								"list"
+							]
+						},
+						"description": "List all available files (Client users only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Download Link (Client Only)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('DOWNLOAD_URL', response.download_url);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CLIENT_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/file/download/{{file_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"file",
+								"download",
+								"{{file_id}}"
+							]
+						},
+						"description": "Generate secure download link for a file (Client users only). Link expires in 10 minutes."
+					},
+					"response": []
+				},
+				{
+					"name": "Secure File Download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DOWNLOAD_URL}}",
+							"host": [
+								"{{DOWNLOAD_URL}}"
+							]
+						},
+						"description": "Download file using the secure encrypted URL (no authentication required for this endpoint)"
+					},
+					"response": []
+				}
+			],
+			"description": "File management endpoints for upload, listing, and secure download"
+		},
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/health",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Check system health and status"
+					},
+					"response": []
+				}
+			],
+			"description": "System monitoring and health check endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8008",
+			"type": "string"
+		}
+	]
+} 
