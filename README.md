@@ -72,12 +72,12 @@ SECRET_KEY=your-secret-key-here
 
 5. **Run the application**
 ```bash
-uvicorn app.main:app --reload --port 8008
+uvicorn app.main:app --reload --port 8009
 ```
 
 6. **Access the API**
-- API Documentation: http://127.0.0.1:8008/docs
-- Health Check: http://127.0.0.1:8008/health
+- API Documentation: http://127.0.0.1:8009/docs
+- Health Check: http://127.0.0.1:8009/health
 
 ## Testing
 
@@ -87,7 +87,7 @@ pytest test_cases.py -v
 ```
 
 ### Manual Testing with Swagger UI
-1. Go to http://127.0.0.1:8008/docs
+1. Go to http://127.0.0.1:8009/docs
 2. Test the complete flow:
    - Client signup → Login → List files → Generate download link
    - Ops login → Upload file
