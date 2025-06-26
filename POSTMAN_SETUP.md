@@ -27,7 +27,7 @@
 Make sure your FastAPI server is running:
 ```bash
 cd secure-file-sharing
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8009 --reload
 ```
 
 ## Testing Workflow
@@ -155,7 +155,7 @@ The collection includes automated test scripts that:
    - Verify file type for uploads
 
 4. **Connection Error**
-   - Ensure server is running on port 8008
+   - Ensure server is running on port 8009
    - Check `BASE_URL` environment variable
 
 ### Server Logs
@@ -166,8 +166,8 @@ tail -f server.log
 
 ## Additional Resources
 
-- **Swagger UI**: `http://localhost:8008/docs`
-- **ReDoc**: `http://localhost:8008/redoc`
+- **Swagger UI**: `http://localhost:8009/docs`
+- **ReDoc**: `http://localhost:8009/redoc`
 - **GitHub Repository**: https://github.com/deepakstwt/Secure_file_sharing_system
 - **Download Guide**: See `DOWNLOAD_GUIDE.md`
 - **Deployment Guide**: See `DEPLOYMENT.md`
