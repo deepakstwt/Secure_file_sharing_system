@@ -4,14 +4,14 @@
 This guide explains how to download documents from the Secure File Sharing System using different methods.
 
 ## Prerequisites
-- Server running on http://127.0.0.1:8008
+- Server running on http://127.0.0.1:8009
 - Client user account (email ending with any domain)
 - Available files uploaded by Ops users
 
 ## Method 1: Using Swagger UI (Easiest)
 
 ### Step 1: Open Swagger UI
-1. Go to: http://127.0.0.1:8008/docs
+1. Go to: http://127.0.0.1:8009/docs
 2. You'll see the interactive API documentation
 
 ### Step 2: Authenticate
@@ -43,7 +43,7 @@ This guide explains how to download documents from the Secure File Sharing Syste
 
 ### Step 1: Login and Get Token
 ```bash
-curl -X POST "http://127.0.0.1:8008/auth/client/login" \
+curl -X POST "http://127.0.0.1:8009/auth/client/login" \
   -H "Content-Type: application/json" \
   -d '{"email": "client@company.com", "password": "Pro12345"}'
 ```
@@ -52,13 +52,13 @@ Save the `access_token` from response.
 
 ### Step 2: List Files
 ```bash
-curl -X GET "http://127.0.0.1:8008/file/list" \
+curl -X GET "http://127.0.0.1:8009/file/list" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ### Step 3: Generate Download Link
 ```bash
-curl -X GET "http://127.0.0.1:8008/file/download/FILE_ID" \
+curl -X GET "http://127.0.0.1:8009/file/download/FILE_ID" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
@@ -75,7 +75,7 @@ import requests
 import json
 
 # Configuration
-BASE_URL = "http://127.0.0.1:8008"
+BASE_URL = "http://127.0.0.1:8009"
 CLIENT_EMAIL = "client@company.com"
 CLIENT_PASSWORD = "Pro12345"
 
@@ -157,12 +157,12 @@ if __name__ == "__main__":
    - Check if file exists in the system
 
 4. **Server Connection Error**
-   - Ensure server is running on port 8008
+   - Ensure server is running on port 8009
    - Check if virtual environment is activated
 
 ### Server Status Check
 ```bash
-curl -X GET "http://127.0.0.1:8008/health"
+curl -X GET "http://127.0.0.1:8009/health"
 ```
 Should return: `{"status": "healthy"}`
 
@@ -195,7 +195,7 @@ Should return: `{"status": "healthy"}`
 ### 3. Download Link Response
 ```json
 {
-  "download_link": "http://127.0.0.1:8008/file/actual-download/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaWxlX2lkIjoiNjg1YWUzZDJhZGMxYTY2YThmZmQ5Y2E2Iiwicm9sZSI6ImNsaWVudCIsImV4cCI6MTc1MDc4OTQwNX0.qLpHAlmZ4hZc_S_9UzOqmkU4qO_g8U3f-YZh6iqyLcA",
+  "download_link": "http://127.0.0.1:8009/file/actual-download/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaWxlX2lkIjoiNjg1YWUzZDJhZGMxYTY2YThmZmQ5Y2E2Iiwicm9sZSI6ImNsaWVudCIsImV4cCI6MTc1MDc4OTQwNX0.qLpHAlmZ4hZc_S_9UzOqmkU4qO_g8U3f-YZh6iqyLcA",
   "message": "success"
 }
 ```
@@ -204,8 +204,8 @@ Should return: `{"status": "healthy"}`
 
 For immediate testing:
 
-1. **Start Server**: `uvicorn app.main:app --reload --port 8008`
-2. **Open Browser**: Go to http://127.0.0.1:8008/docs
+1. **Start Server**: `uvicorn app.main:app --reload --port 8009`
+2. **Open Browser**: Go to http://127.0.0.1:8009/docs
 3. **Login**: Use client@company.com / Pro12345
 4. **List Files**: Execute GET /file/list
 5. **Download**: Use file_id to generate download link

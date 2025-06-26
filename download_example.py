@@ -12,7 +12,7 @@ import os
 from datetime import datetime
 
 # Configuration
-BASE_URL = "http://127.0.0.1:8008"
+BASE_URL = "http://127.0.0.1:8009"
 CLIENT_EMAIL = "client@company.com"  # Change this to your client email
 CLIENT_PASSWORD = "Pro12345"         # Change this to your password
 
@@ -41,7 +41,7 @@ def login_client():
             
     except requests.exceptions.RequestException as e:
         print(f"❌ Connection error: {e}")
-        print("💡 Make sure the server is running on http://127.0.0.1:8008")
+        print("💡 Make sure the server is running on http://127.0.0.1:8009")
         return None
 
 def list_files(token):
