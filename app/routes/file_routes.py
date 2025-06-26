@@ -25,16 +25,15 @@ async def upload_file(
 ):
     if user_type != "ops":
         raise HTTPException(status_code=403, detail="Only Ops can upload files")
-
+    
     ext = file.filename.split(".")[-1].lower()
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=400, detail="Invalid file type")
-
+    
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Save file metadata in MongoDB
     result = await db.files.insert_one({
         "filename": file.filename,
         "file_type": ext,
@@ -68,8 +67,7 @@ async def get_download_link(
 ):
     if user_type != "client":
         raise HTTPException(status_code=403, detail="Only clients can download files")
-
-    # Generate token with expiry
+    
     token_payload = {
         "file_id": file_id,
         "role": user_type,
@@ -78,7 +76,7 @@ async def get_download_link(
     token = jwt.encode(token_payload, SECRET_KEY, algorithm=ALGORITHM)
 
     return {
-        "download_link": f"http://127.0.0.1:8008/file/actual-download/{token}",
+        "download_link": f"http://127.0.0.1:8009/file/actual-download/{token}",
         "message": "success"
     }
 

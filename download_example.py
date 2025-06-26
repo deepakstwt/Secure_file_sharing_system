@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
-"""
-Easy Document Download Script
-Secure File Sharing System
-
-Usage: python download_example.py
-"""
 
 import requests
 import json
 import os
 from datetime import datetime
 
-# Configuration
 BASE_URL = "http://127.0.0.1:8009"
-CLIENT_EMAIL = "client@company.com"  # Change this to your client email
-CLIENT_PASSWORD = "Pro12345"         # Change this to your password
+CLIENT_EMAIL = "client@company.com"
+CLIENT_PASSWORD = "Pro12345"
 
 def print_header():
     print("=" * 60)
@@ -22,7 +15,6 @@ def print_header():
     print("=" * 60)
 
 def login_client():
-    """Login as client user and get access token"""
     print("📋 Step 1: Logging in as client user...")
     
     try:
@@ -45,7 +37,6 @@ def login_client():
         return None
 
 def list_files(token):
-    """List all available files"""
     print("\n📂 Step 2: Fetching available files...")
     
     headers = {"Authorization": f"Bearer {token}"}
@@ -81,7 +72,6 @@ def list_files(token):
         return []
 
 def generate_download_link(token, file_id, filename):
-    """Generate secure download link"""
     print(f"🔗 Step 3: Generating secure download link for '{filename}'...")
     
     headers = {"Authorization": f"Bearer {token}"}
@@ -103,7 +93,6 @@ def generate_download_link(token, file_id, filename):
         return None
 
 def download_file(download_link, filename):
-    """Download the actual file"""
     print(f"\n💾 Step 4: Downloading '{filename}'...")
     
     try:
@@ -113,7 +102,6 @@ def download_file(download_link, filename):
             # Create downloads directory if it doesn't exist
             os.makedirs("downloads", exist_ok=True)
             
-            # Generate unique filename with timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             safe_filename = f"downloads/{timestamp}_{filename}"
             
@@ -139,17 +127,14 @@ def download_file(download_link, filename):
 def main():
     print_header()
     
-    # Step 1: Login
     token = login_client()
     if not token:
         return
     
-    # Step 2: List files
     files = list_files(token)
     if not files:
         return
     
-    # Step 3: Select file to download
     print("🎯 Select a file to download:")
     try:
         while True:
@@ -173,7 +158,6 @@ def main():
         print("\n\n👋 Download cancelled by user")
         return
     
-    # Step 4: Generate download link
     download_link = generate_download_link(
         token, 
         selected_file["file_id"], 
@@ -183,7 +167,6 @@ def main():
     if not download_link:
         return
     
-    # Step 5: Download file
     downloaded_file = download_file(download_link, selected_file["filename"])
     
     if downloaded_file:

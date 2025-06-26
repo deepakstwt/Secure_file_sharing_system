@@ -25,8 +25,7 @@ async def client_signup(user: UserCreate):
         "verification_token": verification_token
     })
 
-    # Generate encrypted verification URL
-    encrypted_url = f"http://127.0.0.1:8008/auth/verify-email/{verification_token}"
+    encrypted_url = f"http://127.0.0.1:8009/auth/verify-email/{verification_token}"
 
     return {
         "message": "Verification email sent", 
@@ -65,7 +64,6 @@ async def ops_login(user: UserLogin):
     token = create_jwt_token(user.email)
     return {"access_token": token, "token_type": "bearer"}
 
-# OAuth2 Token endpoint for Swagger UI
 @router.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     db_user = await db.users.find_one({"email": form_data.username})
