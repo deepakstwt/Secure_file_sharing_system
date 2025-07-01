@@ -27,7 +27,7 @@ async def create_ops_user():
         "verified": True  # Ops users don't need email verification
     })
     
-    print(f"✅ Ops user created: {email}")
+    print(f" Ops user created: {email}")
     print(f"Password: {password}")
 
 if __name__ == "__main__":
