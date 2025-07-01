@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from fastapi.responses import FileResponse
-from app.utils.auth_utils import verify_user_type
+from app.utils.auth_utils import verify_user_type, SECRET_KEY, ALGORITHM
 from app.db.mongo import db
 import os
 import shutil
@@ -14,9 +14,6 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"docx", "pptx", "xlsx"}
-
-SECRET_KEY = "secret"
-ALGORITHM = "HS256"
 
 @router.post("/upload")
 async def upload_file(
@@ -67,6 +64,11 @@ async def get_download_link(
 ):
     if user_type != "client":
         raise HTTPException(status_code=403, detail="Only clients can download files")
+    
+    # Verify file exists
+    file_meta = await db.files.find_one({"_id": ObjectId(file_id)})
+    if not file_meta:
+        raise HTTPException(status_code=404, detail="File not found")
     
     token_payload = {
         "file_id": file_id,

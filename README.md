@@ -1,7 +1,7 @@
 # Secure File Sharing System
 
 ## Overview
-A production-ready secure file sharing system built with FastAPI and MongoDB, featuring role-based access control and encrypted download links.
+A production-ready secure file sharing system built with FastAPI and MongoDB, featuring role-based access control, encrypted download links, and a modern web interface.
 
 ## Features
 
@@ -22,6 +22,14 @@ A production-ready secure file sharing system built with FastAPI and MongoDB, fe
 - **Password Hashing** (bcrypt)
 - **Token Expiration** (10 minutes for download links)
 
+### Web Interface
+- **Modern responsive UI** (HTML/CSS/JS, glassmorphism design)
+- **Login/Signup forms** for both user types
+- **Drag & drop file upload** (Ops)
+- **Interactive file browser** (Client)
+- **Real-time notifications**
+- **Mobile-friendly**
+
 ## API Endpoints
 
 ### Authentication
@@ -37,11 +45,17 @@ A production-ready secure file sharing system built with FastAPI and MongoDB, fe
 - `GET /file/download/{file_id}` - Generate download link (Client only)
 - `GET /file/actual-download/{token}` - Secure file download
 
+### System
+- `/` - Home
+- `/health` - Health check
+- `/web` - Web UI
+
 ## Tech Stack
 - **Backend**: FastAPI (Python 3.9+)
 - **Database**: MongoDB Atlas
 - **Authentication**: JWT tokens
 - **Password Hashing**: bcrypt
+- **Frontend**: HTML, CSS (glassmorphism), JavaScript
 - **File Storage**: Local filesystem
 
 ## Installation & Setup
@@ -65,9 +79,12 @@ pip install -r requirements.txt
 
 4. **Set up environment variables**
 ```bash
-# Create .env file
-MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/
+# Create .env file in secure-file-sharing/
+MONGO_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/secure_file_sharing
 SECRET_KEY=your-secret-key-here
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=120
+DOWNLOAD_TOKEN_EXPIRE_MINUTES=10
 ```
 
 5. **Run the application**
@@ -75,22 +92,25 @@ SECRET_KEY=your-secret-key-here
 uvicorn app.main:app --reload --port 8009
 ```
 
-6. **Access the API**
-- API Documentation: http://127.0.0.1:8009/docs
-- Health Check: http://127.0.0.1:8009/health
+6. **Access the App**
+- **Web Interface**: http://127.0.0.1:8009/web
+- **API Documentation**: http://127.0.0.1:8009/docs
+- **Health Check**: http://127.0.0.1:8009/health
 
-## Testing
+## Web Interface Usage
+- Go to http://127.0.0.1:8009/web
+- Use the navigation bar to Login or Sign Up
+- Ops users can upload files (.pptx, .docx, .xlsx)
+- Client users can list and download files
+- All actions are protected by role-based authentication
 
-### Run Test Suite
-```bash
-pytest test_cases.py -v
-```
+## API Testing
 
-### Manual Testing with Swagger UI
-1. Go to http://127.0.0.1:8009/docs
-2. Test the complete flow:
-   - Client signup → Login → List files → Generate download link
-   - Ops login → Upload file
+### Swagger UI
+- Visit http://127.0.0.1:8009/docs for interactive API docs
+
+### Postman
+- Use the provided `Secure_File_Sharing_API.postman_collection.json` and `Secure_File_Sharing.postman_environment.json` for quick API testing
 
 ## Project Structure
 ```
@@ -98,23 +118,34 @@ secure-file-sharing/
 ├── app/
 │   ├── db/
 │   │   └── mongo.py          # Database connection
-│   │   └── user_schema.py    # Pydantic models
-│   │   └── auth_utils.py     # Authentication utilities
+│   ├── models/               # Data models
+│   ├── routes/               # API routes
+│   ├── schemas/              # Pydantic schemas
+│   ├── utils/                # Utility functions
 │   └── main.py               # FastAPI application
+├── static/
+│   ├── css/style.css         # Web UI styles
+│   └── js/app.js             # Web UI scripts
+├── templates/
+│   └── index.html            # Web UI template
 ├── uploads/                  # File storage directory
-├── test_cases.py            # Test cases
-├── requirements.txt         # Dependencies
-└── README.md               # This file
+├── test_cases.py             # Test cases
+├── requirements.txt          # Dependencies
+├── DEPLOYMENT.md             # Production deployment guide
+├── WEB_UI_GUIDE.md           # Web UI usage guide
+├── Secure_File_Sharing_API.postman_collection.json
+├── Secure_File_Sharing.postman_environment.json
+└── README.md                 # This file
 ```
 
 ## Security Considerations
 
 ### Production Deployment
-- Use strong SECRET_KEY
+- Use a strong SECRET_KEY
 - Enable HTTPS/TLS
 - Set up rate limiting
 - Configure CORS properly
-- Use cloud storage (AWS S3/Google Cloud)
+- Use cloud storage (AWS S3/Google Cloud) for files in production
 - Implement proper logging and monitoring
 
 ### Current Security Features
@@ -124,57 +155,28 @@ secure-file-sharing/
 - File type validation
 - Secure download links with expiration
 
-## API Usage Examples
+## Testing
 
-### 1. Client User Flow
-```python
-# 1. Signup
-response = requests.post("/auth/client/signup", json={
-    "email": "client@example.com",
-    "password": "password123"
-})
-
-# 2. Login
-response = requests.post("/auth/client/login", json={
-    "email": "client@example.com", 
-    "password": "password123"
-})
-token = response.json()["access_token"]
-
-# 3. List files
-headers = {"Authorization": f"Bearer {token}"}
-response = requests.get("/file/list", headers=headers)
-
-# 4. Generate download link
-response = requests.get(f"/file/download/{file_id}", headers=headers)
-download_url = response.json()["download_link"]
+### Run Test Suite
+```bash
+python test_cases.py
 ```
 
-### 2. Ops User Flow
-```python
-# 1. Login
-response = requests.post("/auth/ops/login", json={
-    "email": "ops@example.com",
-    "password": "password123"
-})
-token = response.json()["access_token"]
-
-# 2. Upload file
-headers = {"Authorization": f"Bearer {token}"}
-files = {"file": open("document.xlsx", "rb")}
-response = requests.post("/file/upload", files=files, headers=headers)
-```
+### Manual Testing
+- Use the web interface for end-to-end flows
+- Use Swagger UI or Postman for API endpoint testing
 
 ## Requirements Compliance
 
-**Framework**: FastAPI (Python)  
-**Database**: MongoDB (NoSQL)  
-**Ops User**: Login + File Upload (.pptx, .docx, .xlsx only)  
-**Client User**: Signup + Email Verify + Login + Download + List Files  
-**Secure Download**: Encrypted URLs with JWT tokens  
-**Role-based Access**: Proper authorization controls  
-**Test Cases**: Comprehensive test suite  
-**Production Plan**: Deployment documentation  
+- **Framework**: FastAPI (Python)
+- **Database**: MongoDB (NoSQL)
+- **Ops User**: Login + File Upload (.pptx, .docx, .xlsx only)
+- **Client User**: Signup + Email Verify + Login + Download + List Files
+- **Secure Download**: Encrypted URLs with JWT tokens
+- **Role-based Access**: Proper authorization controls
+- **Test Cases**: Comprehensive test suite
+- **Production Plan**: Deployment documentation
+- **Web UI**: Modern, responsive, glassmorphism design
 
 ## License
 This project is licensed under the MIT License.

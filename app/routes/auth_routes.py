@@ -51,8 +51,11 @@ async def client_login(user: UserLogin):
     db_user = await db.users.find_one({"email": user.email})
     if not db_user or not verify_password(user.password, db_user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not db_user.get("verified", False):
+        raise HTTPException(status_code=401, detail="Email not verified")
 
-    token = create_jwt_token(user.email)
+    token = create_jwt_token(user.email, "client")
     return {"access_token": token, "token_type": "bearer"}
 
 @router.post("/ops/login")
@@ -60,8 +63,11 @@ async def ops_login(user: UserLogin):
     db_user = await db.users.find_one({"email": user.email})
     if not db_user or not verify_password(user.password, db_user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if db_user.get("role") != "ops":
+        raise HTTPException(status_code=403, detail="Access denied. Ops users only.")
 
-    token = create_jwt_token(user.email)
+    token = create_jwt_token(user.email, "ops")
     return {"access_token": token, "token_type": "bearer"}
 
 @router.post("/token")
@@ -70,5 +76,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     if not db_user or not verify_password(form_data.password, db_user["password"]):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     
-    token = create_jwt_token(form_data.username)
+    role = db_user.get("role", "client")
+    if role == "client" and not db_user.get("verified", False):
+        raise HTTPException(status_code=401, detail="Email not verified")
+    
+    token = create_jwt_token(form_data.username, role)
     return {"access_token": token, "token_type": "bearer"}
