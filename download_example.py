@@ -11,7 +11,7 @@ CLIENT_PASSWORD = "Pro12345"
 
 def print_header():
     print("=" * 60)
-    print("🔒 SECURE FILE SHARING - DOCUMENT DOWNLOADER")
+    print("SECURE FILE SHARING - DOCUMENT DOWNLOADER")
     print("=" * 60)
 
 def login_client():
@@ -25,19 +25,19 @@ def login_client():
         
         if response.status_code == 200:
             token = response.json()["access_token"]
-            print("✅ Login successful!")
+            print("Login successful!")
             return token
         else:
-            print(f"❌ Login failed: {response.json().get('detail', 'Unknown error')}")
+            print(f" Login failed: {response.json().get('detail', 'Unknown error')}")
             return None
             
     except requests.exceptions.RequestException as e:
-        print(f"❌ Connection error: {e}")
+        print(f" Connection error: {e}")
         print("💡 Make sure the server is running on http://127.0.0.1:8009")
         return None
 
 def list_files(token):
-    print("\n📂 Step 2: Fetching available files...")
+    print("\n Step 2: Fetching available files...")
     
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -49,10 +49,10 @@ def list_files(token):
             files = files_data["files"]
             
             if not files:
-                print("📭 No files available for download")
+                print(" No files available for download")
                 return []
             
-            print(f"✅ Found {len(files)} file(s):")
+            print(f" Found {len(files)} file(s):")
             print("-" * 50)
             
             for i, file_info in enumerate(files, 1):
@@ -64,11 +64,11 @@ def list_files(token):
             
             return files
         else:
-            print(f"❌ Failed to fetch files: {response.json().get('detail', 'Unknown error')}")
+            print(f" Failed to fetch files: {response.json().get('detail', 'Unknown error')}")
             return []
             
     except requests.exceptions.RequestException as e:
-        print(f"❌ Connection error: {e}")
+        print(f" Connection error: {e}")
         return []
 
 def generate_download_link(token, file_id, filename):
@@ -81,15 +81,15 @@ def generate_download_link(token, file_id, filename):
         
         if response.status_code == 200:
             download_link = response.json()["download_link"]
-            print("✅ Secure download link generated!")
-            print("⏰ Link expires in 10 minutes")
+            print(" Secure download link generated!")
+            print(" Link expires in 10 minutes")
             return download_link
         else:
-            print(f"❌ Failed to generate link: {response.json().get('detail', 'Unknown error')}")
+            print(f" Failed to generate link: {response.json().get('detail', 'Unknown error')}")
             return None
             
     except requests.exceptions.RequestException as e:
-        print(f"❌ Connection error: {e}")
+        print(f" Connection error: {e}")
         return None
 
 def download_file(download_link, filename):
@@ -109,19 +109,19 @@ def download_file(download_link, filename):
                 f.write(response.content)
             
             file_size = len(response.content)
-            print(f"✅ File downloaded successfully!")
-            print(f"📁 Saved as: {safe_filename}")
-            print(f"📏 Size: {file_size} bytes")
+            print(f" File downloaded successfully!")
+            print(f" Saved as: {safe_filename}")
+            print(f" Size: {file_size} bytes")
             
             return safe_filename
         else:
-            print(f"❌ Download failed: Status {response.status_code}")
+            print(f" Download failed: Status {response.status_code}")
             if response.status_code == 401:
-                print("🔒 Download link may have expired (10-minute limit)")
+                print(" Download link may have expired (10-minute limit)")
             return None
             
     except requests.exceptions.RequestException as e:
-        print(f"❌ Download error: {e}")
+        print(f" Download error: {e}")
         return None
 
 def main():
@@ -141,7 +141,7 @@ def main():
             choice = input(f"Enter number (1-{len(files)}) or 'q' to quit: ").strip()
             
             if choice.lower() == 'q':
-                print("👋 Goodbye!")
+                print(" Goodbye!")
                 return
             
             try:
@@ -155,7 +155,7 @@ def main():
                 print("❌ Please enter a valid number or 'q' to quit")
     
     except KeyboardInterrupt:
-        print("\n\n👋 Download cancelled by user")
+        print("\n\n Download cancelled by user")
         return
     
     download_link = generate_download_link(
@@ -171,10 +171,10 @@ def main():
     
     if downloaded_file:
         print("\n" + "=" * 60)
-        print("🎉 DOWNLOAD COMPLETED SUCCESSFULLY!")
+        print("DOWNLOAD COMPLETED SUCCESSFULLY!")
         print("=" * 60)
-        print(f"📂 File location: {os.path.abspath(downloaded_file)}")
-        print("\n🔒 Security Features Used:")
+        print(f" File location: {os.path.abspath(downloaded_file)}")
+        print("\nSecurity Features Used:")
         print("   ✓ JWT Authentication")
         print("   ✓ Role-based Access Control")
         print("   ✓ Encrypted Download Links")
